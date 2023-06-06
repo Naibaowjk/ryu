@@ -59,14 +59,19 @@ class vxlan(packet_base.PacketBase):
 
     @classmethod
     def parser(cls, buf):
-        (flags_reserved, vni_rserved) = struct.unpack_from(cls._PACK_STR, buf)
+        (flags_reserved, vni_reserved) = struct.unpack_from(cls._PACK_STR, buf)
 
         # Check VXLAN flags is valid
         assert (1 << 3) == (flags_reserved >> 24)
 
         # Note: To avoid cyclic import, import ethernet module here
         from ryu.lib.packet import ethernet
-        return cls(vni_rserved >> 8), ethernet.ethernet, buf[cls._MIN_LEN:]
+
+        print(f"*** vxlan flags_reseverd: {flags_reserved}")
+        print(f"*** vxlan vni_reserverd: {vni_reserved}")
+        print(f"*** cls: {cls}")
+        print(f"*** cls(vni_reserved >> 8): {cls(vni_reserved >> 8)}")
+        return cls(vni_reserved >> 8), ethernet.ethernet, buf[cls._MIN_LEN:]
 
     def serialize(self, payload, prev):
         return struct.pack(self._PACK_STR,
