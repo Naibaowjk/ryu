@@ -57,6 +57,8 @@ class vxlan(packet_base.PacketBase):
         super(vxlan, self).__init__()
         self.vni = vni
 
+
+
     @classmethod
     def parser(cls, buf):
         (flags_reserved, vni_reserved) = struct.unpack_from(cls._PACK_STR, buf)
@@ -66,11 +68,13 @@ class vxlan(packet_base.PacketBase):
 
         # Note: To avoid cyclic import, import ethernet module here
         from ryu.lib.packet import ethernet
-
-        print(f"*** vxlan flags_reseverd: {flags_reserved}")
-        print(f"*** vxlan vni_reserverd: {vni_reserved}")
-        print(f"*** cls: {cls}")
-        print(f"*** cls(vni_reserved >> 8): {cls(vni_reserved >> 8)}")
+        print(f"************* vxlan parser by naibaoofficial **********")
+        print(f"* flags    : {get_binary_range(flags_reserved,0,7)} ")
+        print(f"* group id : {get_binary_range(flags_reserved,8,23)}")
+        print(f"* reserved : {get_binary_range(flags_reserved,24,31)}")
+        print(f"* vni      : {get_binary_range(vni_reserved,0,23)}")
+        print(f"* reserved : {get_binary_range(vni_reserved,24,31)}")
+        print(f"*******************************************************")
         return cls(vni_reserved >> 8), ethernet.ethernet, buf[cls._MIN_LEN:]
 
     def serialize(self, payload, prev):
@@ -96,3 +100,8 @@ def vni_to_bin(vni):
     :return: binary representation of VNI.
     """
     return type_desc.Int3.from_user(vni)
+
+def get_binary_range(num, start, end):
+    binary = format(num, '032b')
+    bits_range = binary[start:end+1]
+    return bits_range
