@@ -68,12 +68,12 @@ class vxlan(packet_base.PacketBase):
 
         # Note: To avoid cyclic import, import ethernet module here
         from ryu.lib.packet import ethernet
-        print(f"************* vxlan parser by naibaoofficial **********")
-        print(f"* flags    : {get_binary_range(flags_reserved,0,15)} ")
-        print(f"* group id : {get_binary_range(flags_reserved,16,31)}")
-        print(f"* vni      : {get_binary_range(vni_reserved,0,23)}")
-        print(f"* reserved : {get_binary_range(vni_reserved,24,31)}")
-        print(f"*******************************************************")
+        # print(f"************* vxlan parser by naibaoofficial **********")
+        # print(f"* flags    : {get_binary_range(flags_reserved,0,15)} ")
+        # print(f"* group id : {get_binary_range(flags_reserved,16,31)}")
+        # print(f"* vni      : {get_binary_range(vni_reserved,0,23)}")
+        # print(f"* reserved : {get_binary_range(vni_reserved,24,31)}")
+        # print(f"*******************************************************")
         return cls(vni_reserved >> 8), ethernet.ethernet, buf[cls._MIN_LEN:]
 
     def serialize(self, payload, prev):
